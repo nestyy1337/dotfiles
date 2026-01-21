@@ -1,0 +1,15 @@
+[window]
+opacity = 1
+decorations = "none"
+
+
+
+[colors]
+[colors.primary]
+background = "0x000000"
+
+
+[keyboard]
+bindings = [
+  {key = "U", mods = "Control|Super", chars = "\u001b\u0015" },
+]

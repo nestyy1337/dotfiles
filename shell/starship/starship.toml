@@ -1,0 +1,24 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = false
+
+format = """
+$nix_shell\
+$directory\
+$git_branch\
+$rust\
+$character"""
+
+[nix_shell]
+format = '[$symbol$state( \($name\))]($style) '
+symbol = '<nix> '
+
+[line_break]
+disabled = true
+
+[rust]
+format = '[($toolchain) ]($style)'
+
+[git_branch]
+symbol = ""
+format = '[\($symbol$branch(:$remote_branch)\)]($style) '
+style = 'bold red'

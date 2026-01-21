@@ -1,0 +1,15 @@
+[credential]
+    helper = store
+[user]
+    name = nestyy1337
+    email = szymongluch100@gmail.com
+[includeIf "gitdir:~/work/"]
+    path = ~/.gitconfig-work
+[core]
+    editor = nvim
+[alias]
+    slog = log --all --decorate --oneline
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+[rerere]
+    enabled = true

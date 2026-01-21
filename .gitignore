@@ -1,0 +1,19 @@
+# Ignore everything
+*
+
+# Allow gitignore
+!.gitignore
+
+# Allow directories
+!/*/
+
+# Ignore all directories by default
+/*/*
+
+# Whitelist specific directories
+!/bin/**
+!/nixos/**
+!/editor/**
+!/gui/**
+!/shell/**
+!/misc/**
