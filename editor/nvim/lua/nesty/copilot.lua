@@ -4,8 +4,9 @@ return {
     require('copilot').setup {
       suggestion = {
         enabled = true,
+        auto_trigger = true,
+        cmd = 'Copilot',
         event = 'InsertEnter',
-        -- auto_trigger = true,
         keymap = {
           accept = '<C-j>',
           accept_word = false,

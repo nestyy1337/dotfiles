@@ -12,27 +12,15 @@
     stylix.url = "github:danth/stylix";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      llm-agents,
-      zen-browser,
-      stylix,
-    }:
+  outputs = { self, nixpkgs, home-manager, llm-agents, zen-browser, stylix, }:
     let
       system = "x86_64-linux";
       hosts = [ "pc" "laptop" ];
-    in
-    {
-      nixosConfigurations = nixpkgs.lib.genAttrs hosts (
-        name:
+    in {
+      nixosConfigurations = nixpkgs.lib.genAttrs hosts (name:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = {
-            llm-agents = llm-agents.packages.${system};
-          };
+          specialArgs = { llm-agents = llm-agents.packages.${system}; };
           modules = [
             ./hosts/${name}
             stylix.nixosModules.stylix
@@ -45,7 +33,6 @@
               home-manager.backupFileExtension = "backup";
             }
           ];
-        }
-      );
+        });
     };
 }

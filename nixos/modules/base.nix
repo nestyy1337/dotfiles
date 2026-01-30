@@ -66,11 +66,14 @@ in {
   stylix = {
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
-
+    image = ../assets/wallpaper.png;
     autoEnable = true;
   };
 
-  stylix.targets = { fish.enable = false; };
+  stylix.targets = {
+    console.enable = false;
+    fish.enable = false;
+  };
 
   stylix.fonts = {
     monospace = {
