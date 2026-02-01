@@ -15,6 +15,7 @@
       cargo-nextest
       cargo-outdated
       cargo-watch
+      cargo-release
       cpuset
       gcc
       hyperfine

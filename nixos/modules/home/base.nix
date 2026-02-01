@@ -9,33 +9,11 @@
         if osConfig.config.networking.hostName == "laptop" then 11 else 14;
     in {
       home.file.".cargo/config.toml".text = ''
+        [registries.kellnr]
+        index = "sparse+https://crates.netxp.pl/api/v1/crates/"
+
         [net]
         git-fetch-with-cli = true
-      '';
-
-      home.file.".gitconfig".text = ''
-        [credential]
-            helper = store
-        [user]
-            name = nestyy1337
-            email = szymongluch100@gmail.com
-        [includeIf "gitdir:~/work/"]
-            path = ~/.gitconfig-work
-        [core]
-            editor = nvim
-        [alias]
-            slog = log --all --decorate --oneline
-        [url "ssh://git@github.com/"]
-            insteadOf = https://github.com/
-        [rerere]
-            enabled = true
-      '';
-      home.file.".gitconfig-work".text = ''
-        [user]
-            name = szymongluchnet
-            email = szymon.gluch@netxp.pl
-        [url "git@github-work:"]
-            insteadOf = git@github.com:
       '';
 
       programs.bash.enable = true;

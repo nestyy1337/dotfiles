@@ -43,7 +43,9 @@ in {
 
   # Networking
   networking = {
-    hosts = { "172.26.26.180" = [ "api.netxp.pl" ]; };
+    hosts = {
+      "172.26.26.180" = [ "api.netxp.pl" "rdocs.netxp.pl" "crates.netxp.pl" ];
+    };
     networkmanager.enable = true;
   };
 

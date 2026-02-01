@@ -5,10 +5,10 @@
   imports = [ ./dev.nix ./home/personal.nix ];
 
   # Hyprland
-  programs.hyprland.enable = true;
+  programs.hyprland = { enable = true; };
 
-  # Display manager (ly)
-  services.displayManager.ly.enable = true;
+  # Display manager
+  services.displayManager.ly = { enable = true; };
 
   # Bluetooth
   hardware.bluetooth = {

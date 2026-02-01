@@ -17,6 +17,6 @@
           llm-anthropic = true;
           llm-cmd = true;
         };
-      in [ llmP llm-agents.claude-code llm-agents.gemini-cli nix-tree rr ];
+      in [ llmP llm-agents.claude-code llm-agents.gemini-cli rr ];
   };
 }
