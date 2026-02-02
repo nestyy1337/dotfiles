@@ -16,6 +16,14 @@
         git-fetch-with-cli = true
       '';
 
+      home.file.".gitconfig-work".text = ''
+        [user]
+            name = szymongluchnet
+            email = szymon.gluch@netxp.pl
+        [url "git@github-work:"]
+            insteadOf = git@github.com:
+      '';
+
       programs.bash.enable = true;
 
       programs.fzf = {
@@ -43,10 +51,7 @@
 
       programs.git = {
         enable = true;
-        includes = [
-          { path = ../../../shell/git/config; }
-          { path = ../../../shell/git/config-work; }
-        ];
+        includes = [{ path = ../../../shell/git/config; }];
       };
 
       programs.alacritty = {
