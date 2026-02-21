@@ -202,11 +202,13 @@ in {
         alacritty
         wl-clipboard
         wofi
+        slack
         cliphist
         keepassxc
         pavucontrol
         pulseaudio
         gimp
+        qbittorrent
         signal-desktop
         spotify
         libnotify

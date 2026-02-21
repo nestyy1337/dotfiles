@@ -21,6 +21,9 @@ if status is-interactive
     bind \cf tmux_fzf
 
 
+    direnv hook fish | source
+
+
     # Word movement with Ctrl+Left/Right
     bind \e\[1\;5C forward-word
     bind \e\[1\;5D backward-word

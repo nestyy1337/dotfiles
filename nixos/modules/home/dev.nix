@@ -4,6 +4,18 @@
 {
   imports = [ ./base.nix ];
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+        (pyfinal: pyprev: {
+          llm-anthropic = pyprev.llm-anthropic.overridePythonAttrs {
+            doCheck = false;
+          };
+        })
+      ];
+    })
+  ];
+
   home-manager.users.szymon = { config, pkgs, ... }: {
     services.gpg-agent = {
       enable = true;
@@ -17,6 +29,12 @@
           llm-anthropic = true;
           llm-cmd = true;
         };
-      in [ llmP llm-agents.claude-code llm-agents.gemini-cli rr ];
+      in [
+        llmP
+        llm-agents.claude-code
+        llm-agents.gemini-cli
+        llm-agents.codex
+        rr
+      ];
   };
 }

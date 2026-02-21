@@ -111,11 +111,18 @@ in {
 
   programs.tmux = { enable = true; };
 
+  programs.direnv = {
+    enable = true;
+    enableFishIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   environment.systemPackages = with pkgs; [
     connect_vpn
     csdWrapper
     tmux_fzf
     git
+    direnv
     btop
     ripgrep
     zip
@@ -127,7 +134,6 @@ in {
     openssh
     openconnect
     libsecret
-    stow
   ];
 
   system.stateVersion = "25.11";

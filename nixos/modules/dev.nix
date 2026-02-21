@@ -5,7 +5,15 @@
   imports = [ ./base.nix ./home/dev.nix ];
 
   environment = {
+    sessionVariables.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+      pkgs.wayland
+      pkgs.libxkbcommon
+      pkgs.libGL
+    ];
     systemPackages = with pkgs; [
+      libxkbcommon
+      wayland
+      libGL
       bpftrace
       cargo-expand
       cargo-hack
