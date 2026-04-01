@@ -4,25 +4,43 @@ let
   CsdScriptContent = builtins.readFile ../../bin/csd-wrapper.sh;
   csdWrapper = pkgs.writeShellScriptBin "csd-post" ''
     export PATH="${
-      pkgs.lib.makeBinPath [ pkgs.xmlstarlet pkgs.curl pkgs.coreutils ]
+      pkgs.lib.makeBinPath [
+        pkgs.xmlstarlet
+        pkgs.curl
+        pkgs.coreutils
+      ]
     }:$PATH"
     ${CsdScriptContent}
   '';
   TmuxScriptContent = builtins.readFile ../../bin/tmux_fzf.sh;
   tmux_fzf = pkgs.writeShellScriptBin "tmux_fzf" ''
-    export PATH="${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.tmux ]}:$PATH"
+    export PATH="${
+      pkgs.lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.tmux
+      ]
+    }:$PATH"
     ${TmuxScriptContent}
   '';
   ConnectVPNContent = builtins.readFile ../../bin/connect_vpn.sh;
   connect_vpn = pkgs.writeShellScriptBin "connect_vpn" ''
-    export PATH="${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.tmux ]}:$PATH"
+    export PATH="${
+      pkgs.lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.tmux
+      ]
+    }:$PATH"
     ${ConnectVPNContent}
   '';
-in {
+in
+{
   nixpkgs.config.allowUnfree = true;
 
   # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Timezone
   time.timeZone = "Europe/Warsaw";
@@ -44,26 +62,58 @@ in {
   # Networking
   networking = {
     hosts = {
-      "172.26.26.180" = [ "api.netxp.pl" "rdocs.netxp.pl" "crates.netxp.pl" ];
+      "172.26.26.180" = [
+        "api.netxp.pl"
+        "rdocs.netxp.pl"
+        "crates.netxp.pl"
+        "iris.netxp.pl"
+      ];
+
+      "172.26.26.181" = [ "piris.netxp.pl" ];
     };
     networkmanager.enable = true;
   };
 
-  security.pki.certificateFiles =
-    [ ../../misc/NETXP_FULLCHAIN.crt ../../misc/NETXP_NOMAD_VAULT.crt ];
+  security.pki.certificateFiles = [
+    ../../misc/NETXP_FULLCHAIN.crt
+    ../../misc/NETXP_NOMAD_VAULT.crt
+  ];
 
   # sudo without password for wheel for testing
   security.sudo.wheelNeedsPassword = false;
 
   users.users.szymon = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "adm" "users" "docker" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "adm"
+      "users"
+      "docker"
+    ];
     shell = pkgs.fish;
   };
 
-  virtualisation.docker = { enable = true; };
+  # OOM prevention
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+    freeSwapThreshold = 10;
+    enableNotifications = true;
+  };
 
-  environment.sessionVariables = { UV_NATIVE_TLS = "true"; };
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
+
+  virtualisation.docker = {
+    enable = true;
+  };
+
+  environment.sessionVariables = {
+    UV_NATIVE_TLS = "true";
+  };
 
   stylix = {
     enable = true;
@@ -109,7 +159,9 @@ in {
     vimAlias = true;
   };
 
-  programs.tmux = { enable = true; };
+  programs.tmux = {
+    enable = true;
+  };
 
   programs.direnv = {
     enable = true;
