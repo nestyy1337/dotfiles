@@ -1,16 +1,35 @@
 # Personal home-manager configuration (GUI apps)
-{ config, pkgs, lib, zen-browser, stylix, ... }:
-let hostName = config.networking.hostName;
-in {
+{
+  config,
+  pkgs,
+  lib,
+  zen-browser,
+  stylix,
+  ...
+}:
+let
+  hostName = config.networking.hostName;
+in
+{
   imports = [ ./dev.nix ];
 
-  home-manager.users.szymon = { config, pkgs, zen-browser, ... }:
+  home-manager.users.szymon =
+    {
+      config,
+      pkgs,
+      zen-browser,
+      ...
+    }:
     let
       monitorConfig = {
-        pc = [ "DP-1,2560x1440@144,auto,1" "DP-2,1920x1080@239,auto,1" ];
+        pc = [
+          "DP-1,2560x1440@144,auto,1"
+          "DP-2,1920x1080@239,auto,1"
+        ];
         laptop = [ "eDP-1,1920x1200@60,auto,1" ];
       };
-    in {
+    in
+    {
 
       stylix.cursor = {
         package = pkgs.bibata-cursors;
@@ -44,7 +63,9 @@ in {
         components = [ "secrets" ];
       };
 
-      programs.hyprshot = { enable = true; };
+      programs.hyprshot = {
+        enable = true;
+      };
 
       programs.waybar = {
         enable = true;
@@ -56,7 +77,10 @@ in {
             height = 18;
             spacing = 4;
 
-            modules-left = [ "custom/arch" "hyprland/workspaces" ];
+            modules-left = [
+              "custom/arch"
+              "hyprland/workspaces"
+            ];
 
             modules-right = [
               "custom/vpn"
@@ -103,7 +127,11 @@ in {
                 phone = "";
                 portable = "";
                 car = "";
-                default = [ "" "" "" ];
+                default = [
+                  ""
+                  ""
+                  ""
+                ];
               };
               on-click = "pavucontrol";
             };
@@ -148,7 +176,9 @@ in {
         style = builtins.readFile ../../../gui/waybar/style.css;
       };
 
-      programs.fuzzel = { enable = true; };
+      programs.fuzzel = {
+        enable = true;
+      };
 
       services.hyprpaper = {
         enable = true;
@@ -170,12 +200,12 @@ in {
 
           listener = [
             {
-              timeout = 80;
+              timeout = 160;
               on-timeout = "brightnessctl -s set 10";
               on-resume = "brightnessctl -r";
             }
             {
-              timeout = 200;
+              timeout = 300;
               on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
               on-resume = "brightnessctl -rd rgb:kbd_backlight";
             }
@@ -216,6 +246,7 @@ in {
         brightnessctl
         vlc
         nautilus
+        kdePackages.dolphin
         hyprpolkitagent
         seahorse
         vivaldi

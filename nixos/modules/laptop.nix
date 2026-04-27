@@ -1,5 +1,10 @@
 # Laptop-specific configuration
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Networking
@@ -29,7 +34,7 @@
   };
 
   # Brightness control
-  programs.light.enable = true;
+  # programs.light.enable = true;
 
   # Laptop-specific packages
   environment.systemPackages = with pkgs; [
@@ -40,6 +45,9 @@
   ];
 
   # Bluetooth power saving
-  hardware.bluetooth.settings = { Policy = { AutoEnable = true; }; };
+  hardware.bluetooth.settings = {
+    Policy = {
+      AutoEnable = true;
+    };
+  };
 }
-
