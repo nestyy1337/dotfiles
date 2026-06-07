@@ -5,7 +5,10 @@ format = """
 $nix_shell\
 $directory\
 $git_branch\
+$git_status\
 $rust\
+$golang\
+$python\
 $character"""
 
 [nix_shell]
@@ -20,5 +23,21 @@ format = '[($toolchain) ]($style)'
 
 [git_branch]
 symbol = ""
-format = '[\($symbol$branch(:$remote_branch)\)]($style) '
+format = '[\($symbol$branch(:$remote_branch)\)]($style)'
 style = 'bold red'
+
+[git_status]
+format = '[$all_status$ahead_behind]($style) '
+style = 'red'
+ahead = '↑'
+behind = '↓'
+diverged = '↕'
+deleted = '×'
+
+[golang]
+format = '[$symbol($version)]($style) '
+symbol = 'go '
+
+[python]
+format = '[$symbol($version)( \($virtualenv\))]($style) '
+symbol = 'py '

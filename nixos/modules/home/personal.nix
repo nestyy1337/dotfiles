@@ -26,7 +26,29 @@ in
           "DP-1,2560x1440@144,auto,1"
           "DP-2,1920x1080@239,auto,1"
         ];
-        laptop = [ "eDP-1,1920x1200@60,auto,1" ];
+        laptop = [
+          "HDMI-A-1,1920x1080@60,0x0,1"
+          "eDP-1,1920x1200@60,0x1080,1"
+        ];
+      };
+      workspaceConfig = {
+        pc = [
+          "1,monitor:DP-2"
+          "2,monitor:DP-1"
+          "3,monitor:DP-1"
+          "4,monitor:DP-1"
+          "5,monitor:DP-2"
+          "6,monitor:DP-2"
+        ];
+        laptop = [
+          "1,monitor:eDP-1"
+          "2,monitor:HDMI-A-1"
+          "3,monitor:HDMI-A-1"
+          "4,monitor:eDP-1"
+          "5,monitor:HDMI-A-1"
+          "6,monitor:HDMI-A-1"
+          "7,monitor:eDP-1"
+        ];
       };
     in
     {
@@ -55,6 +77,7 @@ in
         enable = true;
         systemd.enable = false;
         settings.monitor = monitorConfig.${hostName} or [ ",preferred,auto,1" ];
+        settings.workspace = workspaceConfig.${hostName} or [ ];
         extraConfig = builtins.readFile ../../../gui/hypr/hyprland.conf;
       };
 
@@ -166,6 +189,7 @@ in
               format = "{}";
               return-type = "json";
               interval = 5;
+              signal = 8;
               exec = "~/.config/bin/waybar_vpn.sh";
               on-click = "~/.config/bin/waybar_vpn.sh toggle";
             };
@@ -187,6 +211,18 @@ in
           ipc = "on";
         };
       };
+
+      # systemd.user.services.hyprpolkitagent = {
+      #   Unit = {
+      #     Description = "Hyprland Polkit Agent";
+      #     After = [ "graphical-session.target" ];
+      #   };
+      #   Service = {
+      #     ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+      #     Restart = "on-failure";
+      #   };
+      #   Install.WantedBy = [ "graphical-session.target" ];
+      # };
 
       services.hypridle = {
         enable = true;
@@ -228,6 +264,7 @@ in
 
       home.packages = with pkgs; [
         firefox
+        google-chrome
         zen-browser.packages.${pkgs.system}.default
         alacritty
         wl-clipboard
@@ -245,6 +282,7 @@ in
         swaynotificationcenter
         brightnessctl
         vlc
+        discord
         nautilus
         kdePackages.dolphin
         hyprpolkitagent

@@ -1,13 +1,24 @@
 # Minimal shell configuration for all hosts
-{ config, pkgs, lib, ... }@osConfig:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}@osConfig:
 
 {
-  home-manager.users.szymon = { config, pkgs, lib, ... }:
+  home-manager.users.szymon =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     let
       nvimConfigPath = "${config.home.homeDirectory}/.config/editor/nvim";
-      fontSize =
-        if osConfig.config.networking.hostName == "laptop" then 11 else 14;
-    in {
+      fontSize = if osConfig.config.networking.hostName == "laptop" then 11 else 14;
+    in
+    {
       home.file.".cargo/config.toml".text = ''
         [registries.kellnr]
         index = "sparse+https://crates.netxp.pl/api/v1/crates/"
@@ -33,37 +44,50 @@
 
       programs.fish = {
         enable = true;
-        shellAliases = {
-          nix-rebuild-pc =
-            "git -C ~/.config add -A && sudo nixos-rebuild switch --flake ~/.config/nixos#pc";
-          nix-rebuild-lap =
-            "git -C ~/.config add -A && sudo nixos-rebuild switch --flake ~/.config/nixos#laptop";
-          nix-shell = "nix-shell --run fish";
-          nix-develop = "nix develop -c fish";
+        shellAbbrs = {
+          nrp = "sudo nixos-rebuild switch --flake ~/.config/nixos#pc";
+          nrl = "sudo nixos-rebuild switch --flake ~/.config/nixos#laptop";
+          ns = "nix-shell --run fish";
+          nd = "nix develop -c fish";
+          gst = "git status -sb";
+          gl = "git log --oneline --decorate --graph -20";
         };
 
-        functions = {
-          fish_prompt =
-            builtins.readFile ../../../shell/fish/functions/fish_prompt.fish;
-        };
+        plugins = [
+          {
+            name = "autopair";
+            src = pkgs.fishPlugins.autopair.src;
+          }
+          {
+            name = "plugin-sudope";
+            src = pkgs.fishPlugins.plugin-sudope.src;
+          }
+          {
+            name = "fzf-fish";
+            src = pkgs.fishPlugins.fzf-fish.src;
+          }
+        ];
+
         shellInitLast = builtins.readFile ../../../shell/fish/config.fish;
       };
 
       programs.git = {
         enable = true;
-        includes = [{ path = ../../../shell/git/config; }];
+        includes = [ { path = ../../../shell/git/config; } ];
       };
 
       programs.alacritty = {
         enable = true;
         theme = "moonfly";
-        settings = builtins.fromTOML
-          (builtins.readFile ../../../shell/alacritty/alacritty.toml) // {
-            font.size = fontSize;
-          };
+        settings = builtins.fromTOML (builtins.readFile ../../../shell/alacritty/alacritty.toml) // {
+          font.size = fontSize;
+          font.normal.family = "JetBrainsMono Nerd Font Mono";
+        };
       };
 
-      programs.lazygit = { enable = true; };
+      programs.lazygit = {
+        enable = true;
+      };
 
       programs.ssh = {
         enable = true;
@@ -78,14 +102,20 @@
             identityFile = "~/.ssh/sg";
             identitiesOnly = true;
           };
-          "*" = { identityFile = "~/.ssh/id_rsa"; };
+          "*" = {
+            identityFile = "~/.ssh/id_rsa";
+          };
         };
       };
 
       programs.tmux = {
         enable = true;
         shell = "${pkgs.fish}/bin/fish";
-        plugins = with pkgs.tmuxPlugins; [ sensible yank ];
+        plugins = with pkgs.tmuxPlugins; [
+          sensible
+          yank
+          vim-tmux-navigator
+        ];
         extraConfig = builtins.readFile ../../../shell/tmux/tmux.conf;
       };
 
@@ -95,6 +125,8 @@
         defaultEditor = true;
         viAlias = true;
         vimAlias = true;
+        withPython3 = false;
+        withRuby = false;
 
         # These environment variables are needed to build and run binaries
         # with external package managers like mason.nvim.
@@ -103,7 +135,10 @@
           "--suffix"
           "LIBRARY_PATH"
           ":"
-          "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}"
+          "${lib.makeLibraryPath [
+            stdenv.cc.cc
+            zlib
+          ]}"
           "--suffix"
           "PKG_CONFIG_PATH"
           ":"
@@ -113,13 +148,20 @@
           ]}"
         ];
 
-        plugins = with pkgs.vimPlugins; [ ];
-
         extraPackages = with pkgs; [ tree-sitter ];
 
       };
-      xdg.configFile."nvim".source =
-        config.lib.file.mkOutOfStoreSymlink nvimConfigPath;
+      xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink nvimConfigPath;
+      xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
+
+      programs.atuin = {
+        enable = true;
+        enableFishIntegration = true;
+        settings = {
+          style = "compact";
+          inline_height = 20;
+        };
+      };
 
       programs.zoxide = {
         enable = true;
@@ -129,11 +171,16 @@
       programs.starship = {
         enable = true;
         enableFishIntegration = true;
-        settings = builtins.fromTOML
-          (builtins.readFile ../../../shell/starship/starship.toml);
+        settings = builtins.fromTOML (builtins.readFile ../../../shell/starship/starship.toml);
       };
 
-      home.packages = with pkgs; [ bat eza fd jq nix-tree ];
+      home.packages = with pkgs; [
+        bat
+        eza
+        fd
+        jq
+        nix-tree
+      ];
 
       home.stateVersion = "25.11";
     };

@@ -1,8 +1,16 @@
 # Development environment
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [ ./base.nix ./home/dev.nix ];
+  imports = [
+    ./base.nix
+    ./home/dev.nix
+  ];
 
   environment = {
     sessionVariables.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
@@ -16,6 +24,7 @@
       libGL
       bpftrace
       cargo-expand
+      cargo-generate
       cargo-hack
       cargo-insta
       cargo-machete
@@ -49,12 +58,16 @@
       templ
       sqlx-cli
       postgresql
+      sqlite
       postgresql.pg_config
       dbeaver-bin
       jackett
       gh
       openssl
       terraform
+      google-cloud-sdk
+      awscli2
+      bubblewrap
     ];
   };
   home-manager.useGlobalPkgs = true;

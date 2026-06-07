@@ -3,6 +3,9 @@ return {
   branch = 'main',
   version = false,
   build = ':TSUpdate',
+  dependencies = {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+  },
   config = function()
     require('nvim-treesitter.install').prefer_git = true
 

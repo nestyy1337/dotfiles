@@ -1,20 +1,36 @@
 # Personal machine configuration (GUI + personal services)
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [ ./dev.nix ./home/personal.nix ];
+  imports = [
+    ./dev.nix
+    ./home/personal.nix
+  ];
 
   # Hyprland
-  programs.hyprland = { enable = true; };
+  programs.hyprland = {
+    enable = true;
+  };
 
   # Display manager
-  services.displayManager.ly = { enable = true; };
+  services.displayManager.ly = {
+    enable = true;
+  };
 
   # Bluetooth
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings = { Policy = { AutoEnable = true; }; };
+    settings = {
+      Policy = {
+        AutoEnable = true;
+      };
+    };
   };
 
   # Graphics

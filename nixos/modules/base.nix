@@ -67,9 +67,12 @@ in
         "rdocs.netxp.pl"
         "crates.netxp.pl"
         "iris.netxp.pl"
+        "opencti.netxp.pl"
+        "deviris.netxp.pl"
+        "rapi.netxp.pl"
       ];
 
-      "172.26.26.181" = [ "piris.netxp.pl" ];
+      # "172.26.26.181" = [ "piris.netxp.pl" ];
     };
     networkmanager.enable = true;
   };
@@ -78,9 +81,6 @@ in
     ../../misc/NETXP_FULLCHAIN.crt
     ../../misc/NETXP_NOMAD_VAULT.crt
   ];
-
-  # sudo without password for wheel for testing
-  security.sudo.wheelNeedsPassword = false;
 
   users.users.szymon = {
     isNormalUser = true;
