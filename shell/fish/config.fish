@@ -4,15 +4,10 @@ if status is-interactive
     set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
     set -g fish_greeting
 
-    # Keybindings
     function tmux_fzf
         command tmux_fzf
         commandline -f repaint
     end
-
-    bind \cf tmux_fzf
-    bind \e\[1\;5C forward-word
-    bind \e\[1\;5D backward-word
 
     # Aliases (vim handled by nix viAlias/vimAlias)
     alias ls='eza -l'
@@ -30,4 +25,11 @@ if status is-interactive
         $HOME/.local/share/nvim/mason/bin
 
     fish_vi_key_bindings
+
+    bind --mode insert \cf tmux_fzf
+    bind --mode default \cf tmux_fzf
+    bind --mode insert \e\[1\;5C forward-word
+    bind --mode default \e\[1\;5C forward-word
+    bind --mode insert \e\[1\;5D backward-word
+    bind --mode default \e\[1\;5D backward-word
 end

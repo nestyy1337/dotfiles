@@ -75,7 +75,7 @@ in
 
       wayland.windowManager.hyprland = {
         enable = true;
-        systemd.enable = false;
+        systemd.enable = true;
         settings.monitor = monitorConfig.${hostName} or [ ",preferred,auto,1" ];
         settings.workspace = workspaceConfig.${hostName} or [ ];
         extraConfig = builtins.readFile ../../../gui/hypr/hyprland.conf;
@@ -212,17 +212,20 @@ in
         };
       };
 
-      # systemd.user.services.hyprpolkitagent = {
-      #   Unit = {
-      #     Description = "Hyprland Polkit Agent";
-      #     After = [ "graphical-session.target" ];
-      #   };
-      #   Service = {
-      #     ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
-      #     Restart = "on-failure";
-      #   };
-      #   Install.WantedBy = [ "graphical-session.target" ];
-      # };
+      systemd.user.services.hyprpolkitagent = {
+        Unit = {
+          Description = "Hyprland Polkit Agent";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+          Restart = "on-failure";
+        };
+
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
 
       services.hypridle = {
         enable = true;

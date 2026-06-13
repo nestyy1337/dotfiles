@@ -1,3 +1,11 @@
+local function prefer_system_bin(bin)
+  local system_bin = '/run/current-system/sw/bin/' .. bin
+  if vim.fn.executable(system_bin) == 1 then
+    return system_bin
+  end
+  return bin
+end
+
 return {
   'stevearc/conform.nvim',
   lazy = false,
@@ -34,6 +42,8 @@ return {
         'ruff_organize_imports',
       },
       rust = { 'rustfmt' },
+      c = { 'clang_format' },
+      cpp = { 'clang_format' },
       nix = { 'nixfmt' },
       go = { 'gofmt', 'goimports' },
       javascript = { 'prettier' },
@@ -56,6 +66,9 @@ return {
       },
       shfmt = {
         prepend_args = { '-i', '4' },
+      },
+      clang_format = {
+        command = prefer_system_bin 'clang-format',
       },
       -- black = {
       --   command = '/home/nestyy/.local/bin/black',

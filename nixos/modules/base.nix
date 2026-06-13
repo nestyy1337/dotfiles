@@ -70,7 +70,10 @@ in
         "opencti.netxp.pl"
         "deviris.netxp.pl"
         "rapi.netxp.pl"
+        "catalog.netxp.pl"
       ];
+
+      "172.26.26.158" = [ "harbor.infra.netxp.pl" ];
 
       # "172.26.26.181" = [ "piris.netxp.pl" ];
     };
@@ -89,7 +92,6 @@ in
       "networkmanager"
       "adm"
       "users"
-      "docker"
     ];
     shell = pkgs.fish;
   };
@@ -109,6 +111,10 @@ in
 
   virtualisation.docker = {
     enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
 
   environment.sessionVariables = {

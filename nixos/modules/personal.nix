@@ -60,7 +60,11 @@
   services.xserver.xkb.layout = "us";
 
   # Security
-  security.polkit.enable = true;
+  security.polkit = {
+    enable = true;
+    # pkexec is installed by polkit, but its setuid wrapper is opt-in.
+    enablePkexecWrapper = true;
+  };
   security.rtkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.ly.enableGnomeKeyring = true;

@@ -1,3 +1,11 @@
+local function prefer_system_bin(bin)
+  local system_bin = '/run/current-system/sw/bin/' .. bin
+  if vim.fn.executable(system_bin) == 1 then
+    return system_bin
+  end
+  return bin
+end
+
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
@@ -72,8 +80,28 @@ return {
         end
       end,
     })
+    local nixos_flake = vim.fn.expand '~/.config/nixos'
+    local hostname = vim.fn.hostname()
+
     -- Define servers with their specific configurations
     local servers = {
+      clangd = {
+        cmd = {
+          prefer_system_bin 'clangd',
+          '--background-index',
+          '--clang-tidy',
+          '--completion-style=detailed',
+          '--header-insertion=iwyu',
+          '--pch-storage=memory',
+          '--query-driver=/run/current-system/sw/bin/*,/nix/store/*/bin/clang++,/nix/store/*gcc-wrapper*/bin/*,/nix/store/*clang-wrapper*/bin/*',
+        },
+        init_options = {
+          clangdFileStatus = true,
+          usePlaceholders = true,
+          completeUnimported = true,
+          semanticHighlighting = true,
+        },
+      },
       gopls = {
         settings = {
           gopls = {
@@ -97,18 +125,23 @@ return {
         --   end
         -- end,
       },
-      pyright = {
+      basedpyright = {
+        cmd = { prefer_system_bin 'basedpyright-langserver', '--stdio' },
         settings = {
-          python = {
+          basedpyright = {
             analysis = {
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
               diagnosticMode = 'openFilesOnly',
-              typeCheckingMode = 'basic',
-              reportUnusedVariable = false,
-              reportUnusedImport = false,
-              autoImportCompletions = true, -- Enable auto-import suggestions
+              typeCheckingMode = 'standard',
+              autoImportCompletions = true,
+              diagnosticSeverityOverrides = {
+                reportUnusedVariable = 'none',
+                reportUnusedImport = 'none',
+              },
             },
+          },
+          python = {
             pythonPath = vim.env.VIRTUAL_ENV or vim.env.CONDA_PREFIX or vim.env.PYTHONPATH or vim.fn.getcwd() .. '/venv/bin/python',
           },
         },
@@ -116,8 +149,9 @@ return {
       rust_analyzer = {
         settings = {
           ['rust-analyzer'] = {
-            checkOnSave = {
-              command = 'clippy',
+            checkOnSave = true,
+            check = {
+              command = 'check',
             },
             completion = {
               autoimport = {
@@ -146,6 +180,21 @@ return {
         },
       },
       zls = {},
+      nixd = {
+        cmd = { prefer_system_bin 'nixd' },
+        settings = {
+          nixd = {
+            formatting = {
+              command = { 'nixfmt' },
+            },
+            options = {
+              nixos = {
+                expr = ('(builtins.getFlake "%s").nixosConfigurations."%s".options'):format(nixos_flake, hostname),
+              },
+            },
+          },
+        },
+      },
       lua_ls = {
         settings = {
           Lua = {
@@ -159,20 +208,31 @@ return {
     -- Setup Mason
     require('mason').setup()
     -- Ensure tools are installed
-    local ensure_installed = vim.tbl_keys(servers or {})
+    local mason_servers = vim.tbl_filter(function(server)
+      -- Installed by Nix/system packages, not Mason.
+      return not vim.tbl_contains({
+        'basedpyright',
+        'nixd',
+      }, server)
+    end, vim.tbl_keys(servers or {}))
+
+    local ensure_installed = vim.deepcopy(mason_servers)
     vim.list_extend(ensure_installed, {
       'stylua',
+      'clang-format',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-    -- Per blink.cmp documentation, set up LSP servers with capabilities
+
+    local capabilities = require('blink.cmp').get_lsp_capabilities()
+    for server_name, server in pairs(servers) do
+      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      vim.lsp.config(server_name, server)
+    end
+
     require('mason-lspconfig').setup {
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = require('blink.cmp').get_lsp_capabilities(server.capabilities)
-          require('lspconfig')[server_name].setup(server)
-        end,
-      },
+      ensure_installed = mason_servers,
+      automatic_enable = false,
     }
+    vim.lsp.enable(vim.tbl_keys(servers or {}))
   end,
 }

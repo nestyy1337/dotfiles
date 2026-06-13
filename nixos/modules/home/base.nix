@@ -27,12 +27,27 @@
         git-fetch-with-cli = true
       '';
 
+      home.file.".gitconfig".text = ''
+        [user]
+            name = Szymon Gluch
+            email = szymongluch100@gmail.com
+            signingKey = ~/.ssh/id_rsa.pub
+
+        [commit]
+            gpgSign = true
+
+        [gpg]
+            format = ssh
+
+        [includeIf "gitdir:~/work/"]
+            path = ~/.gitconfig-work
+      '';
+
       home.file.".gitconfig-work".text = ''
         [user]
-            name = szymongluchnet
+            name = Szymon Głuch
             email = szymon.gluch@netxp.pl
-        [url "git@github-work:"]
-            insteadOf = git@github.com:
+            signingKey = ~/.ssh/id_rsa_work.pub
       '';
 
       programs.bash.enable = true;
@@ -92,13 +107,8 @@
       programs.ssh = {
         enable = true;
         matchBlocks = {
-          "github-work" = {
-            hostname = "github.com";
-            identityFile = "~/.ssh/id_rsa_work";
-            identitiesOnly = true;
-          };
           "internal-servers" = {
-            host = "10.0.1.* 192.168.10.* 172.24.* 172.26.*";
+            host = "10.0.1.* 192.168.10.* 172.24.* 172.26.* *.netxp.pl *.consul.service";
             identityFile = "~/.ssh/sg";
             identitiesOnly = true;
           };
@@ -128,9 +138,9 @@
         withPython3 = false;
         withRuby = false;
 
-        # These environment variables are needed to build and run binaries
-        # with external package managers like mason.nvim.
-        # LD_LIBRARY_PATH is set by nix-ld.
+        # These environment variables help external package managers like
+        # mason.nvim build native binaries without relying on global linker
+        # environment variables.
         extraWrapperArgs = with pkgs; [
           "--suffix"
           "LIBRARY_PATH"

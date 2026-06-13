@@ -82,6 +82,12 @@ end
 vim.filetype.add {
   extension = {
     templ = 'templ',
+    hh = 'cpp',
+    hpp = 'cpp',
+    hxx = 'cpp',
+    ipp = 'cpp',
+    tpp = 'cpp',
+    inl = 'cpp',
   },
 }
 
