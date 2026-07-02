@@ -65,17 +65,14 @@ in
       "172.26.26.180" = [
         "api.netxp.pl"
         "rdocs.netxp.pl"
-        "crates.netxp.pl"
         "iris.netxp.pl"
         "opencti.netxp.pl"
         "deviris.netxp.pl"
         "rapi.netxp.pl"
+        "crates.netxp.pl"
         "catalog.netxp.pl"
       ];
 
-      "172.26.26.158" = [ "harbor.infra.netxp.pl" ];
-
-      # "172.26.26.181" = [ "piris.netxp.pl" ];
     };
     networkmanager.enable = true;
   };

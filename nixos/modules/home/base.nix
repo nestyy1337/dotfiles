@@ -29,7 +29,7 @@
 
       home.file.".gitconfig".text = ''
         [user]
-            name = Szymon Gluch
+            name = Szymon Głuch
             email = szymongluch100@gmail.com
             signingKey = ~/.ssh/id_rsa.pub
 
@@ -101,6 +101,9 @@
       };
 
       programs.lazygit = {
+        settings = {
+          git.overrideGpg = true;
+        };
         enable = true;
       };
 

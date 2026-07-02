@@ -53,7 +53,6 @@ return {
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client.server_capabilities.documentHighlightProvider then
-          client.server_capabilities.semanticTokensProvider = nil
           local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf,
@@ -205,11 +204,8 @@ return {
         },
       },
     }
-    -- Setup Mason
     require('mason').setup()
-    -- Ensure tools are installed
     local mason_servers = vim.tbl_filter(function(server)
-      -- Installed by Nix/system packages, not Mason.
       return not vim.tbl_contains({
         'basedpyright',
         'nixd',
@@ -224,6 +220,10 @@ return {
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
+    capabilities.general = vim.tbl_deep_extend('force', capabilities.general or {}, {
+      positionEncodings = { 'utf-16' },
+    })
+
     for server_name, server in pairs(servers) do
       server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
       vim.lsp.config(server_name, server)

@@ -276,16 +276,17 @@ in
         cliphist
         keepassxc
         pavucontrol
+        bluetui
         pulseaudio
         gimp
         qbittorrent
         signal-desktop
         spotify
         libnotify
+        discord
         swaynotificationcenter
         brightnessctl
         vlc
-        discord
         nautilus
         kdePackages.dolphin
         hyprpolkitagent
