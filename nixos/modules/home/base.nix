@@ -27,20 +27,11 @@
         git-fetch-with-cli = true
       '';
 
-      home.file.".gitconfig".text = ''
-        [user]
-            name = Szymon Głuch
-            email = szymongluch100@gmail.com
-            signingKey = ~/.ssh/id_rsa.pub
-
-        [commit]
-            gpgSign = true
-
-        [gpg]
-            format = ssh
-
-        [includeIf "gitdir:~/work/"]
-            path = ~/.gitconfig-work
+      home.activation.mutableGitconfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        if [ -L "$HOME/.gitconfig" ]; then
+          run rm -f "$HOME/.gitconfig"
+        fi
+        run touch "$HOME/.gitconfig"
       '';
 
       home.file.".gitconfig-work".text = ''
@@ -86,9 +77,47 @@
         shellInitLast = builtins.readFile ../../../shell/fish/config.fish;
       };
 
+      programs.jujutsu = {
+        enable = true;
+        settings = {
+          user = {
+            name = "Szymon Głuch";
+            email = "szymongluch100@gmail.com";
+          };
+
+          "--scope" = [
+            {
+              "--when" = {
+                repositories = [ "~/work" ];
+              };
+
+              user = {
+                email = "szymon.gluch@netxp.pl";
+              };
+            }
+          ];
+        };
+      };
+
       programs.git = {
         enable = true;
-        includes = [ { path = ../../../shell/git/config; } ];
+        lfs.enable = true;
+        extraConfig = {
+          user = {
+            name = "Szymon Głuch";
+            email = "szymongluch100@gmail.com";
+            signingKey = "~/.ssh/id_rsa.pub";
+          };
+          commit.gpgSign = true;
+          gpg.format = "ssh";
+        };
+        includes = [
+          { path = ../../../shell/git/config; }
+          {
+            condition = "gitdir:~/work/";
+            path = "~/.gitconfig-work";
+          }
+        ];
       };
 
       programs.alacritty = {
@@ -191,6 +220,7 @@
         bat
         eza
         fd
+        glow
         jq
         nix-tree
       ];

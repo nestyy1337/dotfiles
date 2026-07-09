@@ -42,6 +42,12 @@ in
     "flakes"
   ];
 
+  # Trust the numtide binary cache used by the llm-agents flake
+  nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
+  nix.settings.extra-trusted-public-keys = [
+    "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+  ];
+
   # Timezone
   time.timeZone = "Europe/Warsaw";
 
@@ -177,6 +183,7 @@ in
     csdWrapper
     tmux_fzf
     git
+    jujutsu
     direnv
     btop
     ripgrep

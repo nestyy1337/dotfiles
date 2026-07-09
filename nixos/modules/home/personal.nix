@@ -76,8 +76,17 @@ in
       wayland.windowManager.hyprland = {
         enable = true;
         systemd.enable = true;
-        settings.monitor = monitorConfig.${hostName} or [ ",preferred,auto,1" ];
-        settings.workspace = workspaceConfig.${hostName} or [ ];
+        settings = {
+          monitor = monitorConfig.${hostName} or [ ",preferred,auto,1" ];
+          workspace = workspaceConfig.${hostName} or [ ];
+          env = [
+            "XCURSOR_THEME,${config.stylix.cursor.name}"
+            "XCURSOR_SIZE,${toString config.stylix.cursor.size}"
+          ];
+          exec-once = [
+            "hyprctl setcursor ${config.stylix.cursor.name} ${toString config.stylix.cursor.size}"
+          ];
+        };
         extraConfig = builtins.readFile ../../../gui/hypr/hyprland.conf;
       };
 
@@ -284,6 +293,7 @@ in
         spotify
         libnotify
         discord
+        github-desktop
         swaynotificationcenter
         brightnessctl
         vlc

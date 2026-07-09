@@ -41,7 +41,6 @@
         [
           llmP
           llm-agents.claude-code
-          llm-agents.gemini-cli
           llm-agents.opencode
           llm-agents.codex
           rr

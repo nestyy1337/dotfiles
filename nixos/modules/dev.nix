@@ -19,6 +19,7 @@
     bpftrace
     cargo-expand
     cargo-generate
+    cargo-deny
     cargo-hack
     cargo-insta
     cargo-machete
@@ -27,6 +28,7 @@
     cargo-outdated
     cargo-watch
     cargo-release
+    cargo-llvm-cov
     cpuset
     gcc
     hyperfine
