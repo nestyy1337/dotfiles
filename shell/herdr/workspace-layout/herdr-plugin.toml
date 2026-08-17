@@ -1,0 +1,16 @@
+id = "szymon.workspace-layout"
+name = "Workspace layout"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Bootstrap new workspaces with editor, test, and shell tabs"
+platforms = ["linux"]
+
+[[actions]]
+id = "apply"
+title = "Apply default workspace tabs"
+contexts = ["workspace"]
+command = ["bash", "bootstrap.sh"]
+
+[[events]]
+on = "workspace.created"
+command = ["bash", "bootstrap.sh"]

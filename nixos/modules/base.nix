@@ -22,6 +22,19 @@ let
     }:$PATH"
     ${TmuxScriptContent}
   '';
+  HerdrWorkspaceScriptContent = builtins.readFile ../../bin/herdr-workspace.sh;
+  herdr_workspace = pkgs.writeShellScriptBin "herdr-workspace" ''
+    export PATH="${
+      pkgs.lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.fd
+        pkgs.fzf
+        pkgs.gnused
+        pkgs.herdr
+      ]
+    }:$PATH"
+    ${HerdrWorkspaceScriptContent}
+  '';
   ConnectVPNContent = builtins.readFile ../../bin/connect_vpn.sh;
   connect_vpn = pkgs.writeShellScriptBin "connect_vpn" ''
     export PATH="${
@@ -181,6 +194,7 @@ in
   environment.systemPackages = with pkgs; [
     connect_vpn
     csdWrapper
+    herdr_workspace
     tmux_fzf
     git
     jujutsu

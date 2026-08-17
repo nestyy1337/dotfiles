@@ -169,6 +169,52 @@
         extraConfig = builtins.readFile ../../../shell/tmux/tmux.conf;
       };
 
+      programs.herdr = {
+        enable = true;
+      };
+
+      xdg.configFile."herdr/config.toml".text = ''
+        # Keep this file declarative; do not edit it through Herdr's settings UI.
+        onboarding = false
+
+        [theme]
+        name = "rose-pine"
+
+        [terminal]
+        default_shell = "fish"
+        new_cwd = "follow"
+
+        [keys]
+        prefix = "ctrl+a"
+        copy_mode = "ctrl+super+u"
+        navigate_workspace_up = "k"
+        navigate_workspace_down = "j"
+        # This is Herdr's closest equivalent to tmux's direct C-q last-window.
+        last_pane = "ctrl+q"
+
+        [ui]
+        # Keep Neovim layouts wide; toggle the agent sidebar with prefix+b.
+        sidebar_start_collapsed = true
+        sidebar_collapsed_mode = "hidden"
+        mouse_capture = true
+        copy_on_select = true
+        prompt_new_tab_name = false
+        hide_tab_bar_when_single_tab = true
+        pane_gaps = false
+
+        [ui.toast]
+        # Keep the notification inside Herdr so prefix+o can focus its agent.
+        delivery = "herdr"
+        delay_seconds = 1
+      '';
+
+      # Herdr keeps the enabled-plugin registry next to its session state, so
+      # register this local workflow on every Home Manager activation.  The
+      # plugin itself is intentionally ordinary, reviewable Bash in this repo.
+      home.activation.linkHerdrWorkspaceLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        run ${pkgs.herdr}/bin/herdr plugin link "$HOME/.config/shell/herdr/workspace-layout" --enabled
+      '';
+
       programs.neovim = {
         enable = true;
         package = pkgs.neovim-unwrapped;

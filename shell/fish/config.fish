@@ -4,8 +4,8 @@ if status is-interactive
     set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
     set -g fish_greeting
 
-    function tmux_fzf
-        command tmux_fzf
+    function herdr_workspace
+        command herdr-workspace
         commandline -f repaint
     end
 
@@ -26,8 +26,8 @@ if status is-interactive
 
     fish_vi_key_bindings
 
-    bind --mode insert \cf tmux_fzf
-    bind --mode default \cf tmux_fzf
+    bind --mode insert \cf herdr_workspace
+    bind --mode default \cf herdr_workspace
     bind --mode insert \e\[1\;5C forward-word
     bind --mode default \e\[1\;5C forward-word
     bind --mode insert \e\[1\;5D backward-word

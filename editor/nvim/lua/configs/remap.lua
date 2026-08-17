@@ -23,7 +23,7 @@ vim.keymap.set('n', '<C-y>', '<C-i>', { noremap = true, silent = true })
 
 vim.keymap.set('i', '<C-c>', '<Esc>')
 
-vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
+vim.keymap.set('n', '<C-f>', '<cmd>!herdr-workspace<CR>', { desc = 'Open project as Herdr workspace' })
 
 vim.keymap.set('n', '<leader>q', '<cmd>Trouble quickfix toggle<cr>', { desc = 'Quickfix (Trouble)' })
 vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
