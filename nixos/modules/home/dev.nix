@@ -16,6 +16,10 @@
           llm-anthropic = pyprev.llm-anthropic.overridePythonAttrs {
             doCheck = false;
           };
+
+          json-schema-to-pydantic = pyprev.json-schema-to-pydantic.overridePythonAttrs {
+            doCheck = false;
+          };
         })
       ];
     })

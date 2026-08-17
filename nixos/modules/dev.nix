@@ -12,6 +12,24 @@
     ./home/dev.nix
   ];
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      mongodb-compass = prev.mongodb-compass.overrideAttrs (old: {
+        buildCommand =
+          builtins.replaceStrings
+            [
+              ''
+                wrapGAppsHook $out/bin/mongodb-compass
+              ''
+            ]
+            [
+              ""
+            ]
+            old.buildCommand;
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     libxkbcommon
     wayland
@@ -29,6 +47,7 @@
     cargo-watch
     cargo-release
     cargo-llvm-cov
+    sccache
     cpuset
     gcc
     hyperfine
@@ -46,11 +65,14 @@
     python3
     statix
     uv
+    yt-dlp
     watchexec
     go
     gotestsum
     ruby
     rustup
+    nodejs
+    pnpm
     tcpdump
     valgrind
     mongodb-compass

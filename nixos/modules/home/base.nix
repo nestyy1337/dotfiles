@@ -25,6 +25,9 @@
 
         [net]
         git-fetch-with-cli = true
+
+        [build]
+        rustc-wrapper = "sccache"
       '';
 
       home.activation.mutableGitconfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -142,6 +145,11 @@
           "internal-servers" = {
             host = "10.0.1.* 192.168.10.* 172.24.* 172.26.* *.netxp.pl *.consul.service";
             identityFile = "~/.ssh/sg";
+            identitiesOnly = true;
+          };
+          "aws" = {
+            host = "*.compute.amazonaws.com *.compute-1.amazonaws.com";
+            identityFile = "~/.ssh/aws-2026.pem";
             identitiesOnly = true;
           };
           "*" = {

@@ -19,3 +19,6 @@
 !/misc/**
 !README.md
 
+# Machine-local agent settings are never shared
+**/.claude/settings.local.json
+
