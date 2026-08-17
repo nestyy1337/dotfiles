@@ -9,6 +9,7 @@
 {
   imports = [
     ./dev.nix
+    ./netxp-vpn.nix
     ./home/personal.nix
   ];
 
