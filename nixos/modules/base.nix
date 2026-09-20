@@ -96,6 +96,20 @@ in
     networkmanager.enable = true;
   };
 
+  # Per-link DNS instead of everything racing to overwrite resolv.conf.
+  services.resolved.enable = true;
+
+  # Sourced by vpnc-script before it configures the tunnel DNS. Matched on the
+  # pushed resolver rather than an interface name, which could be another VPN.
+  environment.etc."vpnc/connect.d/netxp-dns".text = ''
+    case " ''${INTERNAL_IP4_DNS:-} " in
+      *" 172.24.24.20 "*)
+        INTERNAL_IP4_DNS="172.24.24.20"
+        CISCO_SPLIT_DNS="''${CISCO_SPLIT_DNS:+$CISCO_SPLIT_DNS,}~netxp.pl"
+        ;;
+    esac
+  '';
+
   security.pki.certificateFiles = [
     ../../misc/NETXP_FULLCHAIN.crt
     ../../misc/NETXP_NOMAD_VAULT.crt
@@ -118,6 +132,15 @@ in
     freeMemThreshold = 5;
     freeSwapThreshold = 10;
     enableNotifications = true;
+  };
+
+  # Stable peer addressing regardless of which network this host is on.
+  # openFirewall opens UDP 41641 so peers get a direct path instead of DERP.
+  # accept-dns is safe now that resolved arbitrates per link.
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    extraSetFlags = [ "--accept-dns=true" ];
   };
 
   zramSwap = {

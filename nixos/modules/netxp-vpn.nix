@@ -11,7 +11,7 @@
 #   }
 #
 # The service stays inert until that file exists (see ConditionPathExists).
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   services.strongswan-swanctl = {
@@ -52,6 +52,9 @@
       };
     };
   };
+
+  # Connect only when explicitly started, not at boot.
+  systemd.services.strongswan-swanctl.wantedBy = lib.mkForce [ ];
 
   # Do not start a daemon that would continuously attempt (and fail) EAP
   # authentication if the credentials have not been installed yet.
