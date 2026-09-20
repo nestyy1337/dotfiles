@@ -8,10 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    llm-agents.url = "github:numtide/llm-agents.nix";
     paseo = {
       url = "github:getpaseo/paseo/v0.7.2";
       inputs.nixpkgs.follows = "nixpkgs";
