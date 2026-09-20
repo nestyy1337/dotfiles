@@ -12,6 +12,10 @@
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    paseo = {
+      url = "github:getpaseo/paseo/v0.7.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix.url = "github:danth/stylix";
   };
 
@@ -21,6 +25,7 @@
       nixpkgs,
       home-manager,
       llm-agents,
+      paseo,
       zen-browser,
       stylix,
     }:
@@ -38,6 +43,7 @@
           inherit system;
           specialArgs = {
             llm-agents = llm-agents.packages.${system};
+            paseo = paseo.packages.${system};
           };
 
           modules = [
@@ -47,6 +53,7 @@
             {
               home-manager.extraSpecialArgs = {
                 llm-agents = llm-agents.packages.${system};
+                paseo = paseo.packages.${system};
                 zen-browser = zen-browser;
               };
               home-manager.backupFileExtension = "backup";

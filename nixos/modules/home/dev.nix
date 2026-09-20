@@ -3,6 +3,7 @@
   config,
   pkgs,
   llm-agents,
+  paseo,
   ...
 }:
 
@@ -41,12 +42,21 @@
             llm-anthropic = true;
             llm-cmd = true;
           };
+          # Upstream ships a stale nix/npm-deps.hash at v0.7.2; the pinned
+          # lockfile actually prefetches to this. Recheck when the pin moves.
+          paseoP = paseo.paseo.override {
+            npmDepsHash = "sha256-0hOGev0HglOQmofzPQMfiWh1opg6cpiEgsfK22AKcGk=";
+          };
         in
         [
           llmP
           llm-agents.claude-code
           llm-agents.opencode
           llm-agents.codex
+          llm-agents.grok
+          llm-agents.t3code
+          llm-agents.t3code-desktop
+          paseoP
           rr
         ];
     };

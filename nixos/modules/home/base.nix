@@ -20,6 +20,10 @@
     in
     {
       home.file.".cargo/config.toml".text = ''
+        [alias]
+        lint = "clippy --workspace --all-targets --all-features -- -D warnings -W clippy::pedantic"
+        lint-fix = "clippy --fix --workspace --all-targets --all-features --allow-dirty -- -W clippy::pedantic"
+
         [registries.kellnr]
         index = "sparse+https://crates.netxp.pl/api/v1/crates/"
 
@@ -106,6 +110,8 @@
         enable = true;
         lfs.enable = true;
         extraConfig = {
+          pull.rebase = true;
+          rebase.autoStash = true;
           user = {
             name = "Szymon Głuch";
             email = "szymongluch100@gmail.com";
