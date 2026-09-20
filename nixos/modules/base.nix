@@ -90,6 +90,7 @@ in
         "rapi.netxp.pl"
         "crates.netxp.pl"
         "catalog.netxp.pl"
+        "nomad.netxp.pl"
       ];
 
     };

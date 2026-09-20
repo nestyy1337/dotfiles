@@ -266,11 +266,13 @@ in
               timeout = 600;
               on-timeout = "loginctl lock-session";
             }
-            {
-              timeout = 1400;
-              on-timeout = "systemctl suspend";
-            }
-          ];
+          ]
+          # Only the laptop suspends on idle; on the desktop it just drops
+          # long-running sessions.
+          ++ lib.optional (hostName == "laptop") {
+            timeout = 1400;
+            on-timeout = "systemctl suspend";
+          };
         };
       };
 
@@ -298,6 +300,11 @@ in
         brightnessctl
         vlc
         nautilus
+        python314Packages.pymupdf
+        python314Packages.pdftotext
+        poppler-utils
+        ocrmypdf
+        tesseract
         kdePackages.dolphin
         hyprpolkitagent
         seahorse

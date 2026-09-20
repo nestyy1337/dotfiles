@@ -90,6 +90,7 @@
     terraform
     google-cloud-sdk
     awscli2
+    azure-cli
     bubblewrap
   ];
 
