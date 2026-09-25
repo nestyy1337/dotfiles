@@ -12,13 +12,13 @@
 
 # Whitelist specific directories
 !/bin/**
-!/nixos/**
 !/editor/**
 !/gui/**
 !/shell/**
-!/misc/**
 !README.md
 
 # Machine-local agent settings are never shared
 **/.claude/settings.local.json
 
+# System config is its own private repo (nestyy1337/nixos-config)
+/nixos/
